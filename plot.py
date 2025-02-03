@@ -2,14 +2,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Load the CSV file
-csv_file = "benchmark_results.csv"
+csv_file = "mojo_benchmark_results.csv"
 data = pd.read_csv(csv_file)
 
 # Extract columns
 sizes = data["Size"]
 vectorized_times = data["Vectorized Time (ms)"]
 parallelized_times = data["Parallelized Time (ms)"]
-speedup = data["Speedup"]
 
 # Create a plot with logarithmic scale
 plt.figure(figsize=(10, 6))

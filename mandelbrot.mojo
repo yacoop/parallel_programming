@@ -7,6 +7,7 @@ from algorithm import parallelize, vectorize
 from complex import ComplexFloat64, ComplexSIMD
 from memory import UnsafePointer
 
+
 alias float_type = DType.float64
 alias int_type = DType.int32
 alias simd_width = 2 * simdwidthof[float_type]()
@@ -109,9 +110,9 @@ fn benchmark_for_size[size: Int]() raises:
     fn bench_parallel():
         parallelize[worker](size, size)
 
-    var vectorized = benchmark.run[bench]().mean(unit)
+    var vectorized = benchmark.run[bench](min_runtime_secs=10).mean(unit)
     print("Vectorized:", vectorized, unit)
-    var parallelized = benchmark.run[bench_parallel]().mean(unit)
+    var parallelized = benchmark.run[bench_parallel](min_runtime_secs=10).mean(unit)
     print("Parallelized:", parallelized, unit)
 
     print("Parallel speedup:", vectorized / parallelized)
@@ -122,7 +123,11 @@ fn benchmark_for_size[size: Int]() raises:
 
     # to save times to file
     var filename = "mojo_benchmark_results.csv"
-    var file = open(filename, "a")  # Open in append mode
+    var file = open(filename, "r")  # Open in append mode
+    file_content = file.read()
+    file.close()
+    file = open(filename, "w")
+    file.write(file_content)
     file.write(String(size) + "," + String(vectorized) + "," + String(parallelized) + "\n")
     file.close()
     matrix.data.free()
